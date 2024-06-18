@@ -1,15 +1,32 @@
-#!/usr/local/bin/perl -Tw
+#!/usr/bin/env python3
 
-use strict;
-use CGI;
+import cgi
+import cgitb
 
-my($cgi) = new CGI;
+cgitb.enable()  # 启用详细错误报告
 
-print $cgi->header;
-my($color) = "blue";
-$color = $cgi->param('color') if defined $cgi->param('color');
+def main():
+    form = cgi.FieldStorage()
 
-print $cgi->start_html(-title => uc($color),
-                       -BGCOLOR => $color);
-print $cgi->h1("This is $color");
-print $cgi->end_html;
+    # 默认颜色
+    color = "blue"
+    if "color" in form:
+        color = form.getvalue("color")
+
+    # 打印 HTTP 头部
+    print("Content-Type: text/html\n")
+    
+    # 打印 HTML 内容
+    print(f"""<!DOCTYPE html>
+<html>
+<head>
+    <title>{color.upper()}</title>
+</head>
+<body bgcolor="{color}">
+    <h1>This is {color}</h1>
+</body>
+</html>
+""")
+
+if __name__ == "__main__":
+    main()

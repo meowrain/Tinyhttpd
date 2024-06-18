@@ -1,20 +1,25 @@
-#!/usr/local/bin/perl -Tw
+#!/usr/bin/env python3
 
-use strict;
-use CGI;
+import cgi
+import cgitb
 
-my($cgi) = new CGI;
+cgitb.enable()  # 用于调试
 
-print $cgi->header('text/html');
-print $cgi->start_html(-title => "Example CGI script",
-                       -BGCOLOR => 'red');
-print $cgi->h1("CGI Example");
-print $cgi->p, "This is an example of CGI\n";
-print $cgi->p, "Parameters given to this script:\n";
-print "<UL>\n";
-foreach my $param ($cgi->param)
-{
- print "<LI>", "$param ", $cgi->param($param), "\n";
-}
-print "</UL>";
-print $cgi->end_html, "\n";
+print("Content-Type: text/html\n")  # 输出 HTTP 头部
+print("<html>")
+print("<head>")
+print("<title>Example CGI script</title>")
+print("</head>")
+print("<body bgcolor='red'>")
+print("<h1>CGI Example</h1>")
+print("<p>This is an example of CGI</p>")
+print("<p>Parameters given to this script:</p>")
+print("<ul>")
+
+form = cgi.FieldStorage()
+for param in form.keys():
+    print(f"<li>{param}: {form.getvalue(param)}</li>")
+
+print("</ul>")
+print("</body>")
+print("</html>")
